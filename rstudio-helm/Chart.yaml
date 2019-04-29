@@ -1,0 +1,7 @@
+apiVersion: v1
+name: RStudio
+version: 2.13.1
+description: Deploying R Studio server using k8s cluster
+maintainers:
+  - name: Murali Karthik Kothapalli
+    email: muralikarthik.k@renci.org

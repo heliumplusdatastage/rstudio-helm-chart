@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rstudio-deployment #Name of the deployment.
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rstudio-demo #To later reference this deployment.
+  template:
+    metadata: #Information about the application
+      labels:
+        app: rstudio-demo
+    spec:
+      securityContext:
+        runAsGroup: 1005
+        fsGroup: 2000
+      containers:
+      - name: rstudio-demo
+        image: "muralikarthikk/rstudio-serv:v4"
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80 #Exposing port 80 on the R Studio container
+        env:
+        - name: PASSWORD
+          value: "renci2019$"
+        command: ["/bin/bash", "-c"]
+        args: ["apt-get update && apt-get install nano && apt-get install whois && python /user_mgmt.py && /init"]
+        volumeMounts:
+          - name: rstudio-storage
+            mountPath: /shareddata
+            readOnly: false
+          - name: config
+            mountPath: /data/templates
+      volumes:
+        - name: rstudio-storage
+          persistentVolumeClaim:
+            claimName: pvc-for-rstudio
+        - name: config
+          configMap:
+            name: rstudio-configmap        
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-for-rstudio
+  annotations:
+    pv.beta.kubernetes.io/gid: "1004"
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 10Gi
+  persistentVolumeReclaimPolicy: Retain
+  gcePersistentDisk:
+    pdName: rstudio-disk-1
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-for-rstudio
+  labels:
+    app: rstudio-demo
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rstudio-configmap
+data:
+  config1.txt: |-
+    ananyamu	1010	1010
+    muralika	1011	1011
+    steveco	1012	1012
+    ashokk	1013	1013
+    kirabr	1014	1014
+    clarisca	1015	1015
+    hlander	1016	1016
