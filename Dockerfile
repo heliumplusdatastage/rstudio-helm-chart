@@ -1,6 +1,9 @@
 ### Dockerfile for rocker/tidyverse with trial base-layer security improvements, based on Rstudio tidyverse image with additional upgrades ###
 FROM rocker/rstudio:3.5.3
 RUN apt-get update -qq && apt-get -y --no-install-recommends install \
+  auditd \
+  nano \
+  whois \
   libxml2-dev \
   libcairo2-dev \
   libsqlite3-dev \
