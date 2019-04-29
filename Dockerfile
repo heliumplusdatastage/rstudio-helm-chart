@@ -32,7 +32,11 @@ RUN wget https://www.openssl.org/source/openssl-1.1.1a.tar.gz && \
     mv /usr/bin/openssl ~/tmp && \
     make install && \
     ln -s /usr/local/bin/openssl /usr/bin/openssl && \
-    sudo ldconfig 
+    sudo ldconfig
+RUN echo "-a exit,always -F arch=b64 -F euid=0 -S execve -k root" >> /etc/audit/rules.d/audit.rules
+RUN echo "-a exit,always -F arch=b32 -F euid=0 -S execve -k root" >> /etc/audit/rules.d/audit.rules
+RUN echo "-a exit,always -F arch=b64 -F euid>=1000 -S execve -k useract" >> /etc/audit/rules.d/audit.rules
+RUN echo "-a exit,always -F arch=b32 -F euid>=1000 - S execve -k useract" >> /etc/audit/rules.d/audit.rules
 RUN groupadd rstudio_whitelist -g 1004
 RUN echo -n "rstudio ALL=(ALL) ALL" >> /etc/sudoers 
 COPY ./user_mgmt.py .
