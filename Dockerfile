@@ -36,7 +36,7 @@ RUN wget https://www.openssl.org/source/openssl-1.1.1a.tar.gz && \
 RUN echo "-a exit,always -F arch=b64 -F euid=0 -S execve -k root" >> /etc/audit/rules.d/audit.rules
 RUN echo "-a exit,always -F arch=b32 -F euid=0 -S execve -k root" >> /etc/audit/rules.d/audit.rules
 RUN echo "-a exit,always -F arch=b64 -F euid>=1000 -S execve -k useract" >> /etc/audit/rules.d/audit.rules
-RUN echo "-a exit,always -F arch=b32 -F euid>=1000 - S execve -k useract" >> /etc/audit/rules.d/audit.rules
+RUN echo "-a exit,always -F arch=b32 -F euid>=1000 -S execve -k useract" >> /etc/audit/rules.d/audit.rules
 RUN service auditd restart
 RUN groupadd rstudio_whitelist -g 1004
 RUN echo -n "rstudio ALL=(ALL) ALL" >> /etc/sudoers 
