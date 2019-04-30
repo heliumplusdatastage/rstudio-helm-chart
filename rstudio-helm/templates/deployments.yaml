@@ -15,6 +15,7 @@ spec:
       securityContext:
         runAsGroup: 1005
         fsGroup: 2000
+        hostPID: true
       containers:
       - name: rstudio-demo
         image: "muralikarthikk/rstudio-serv:v4"
@@ -33,7 +34,7 @@ spec:
           - name: config
             mountPath: /data/templates
         securityContext:
-          allowPrivilegeEscalation: false
+          allowPrivilegeEscalation: true
       volumes:
         - name: rstudio-storage
           persistentVolumeClaim:
