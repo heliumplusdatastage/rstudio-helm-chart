@@ -32,6 +32,8 @@ spec:
             readOnly: false
           - name: config
             mountPath: /data/templates
+        securityContext:
+          allowPrivilegeEscalation: false
       volumes:
         - name: rstudio-storage
           persistentVolumeClaim:
